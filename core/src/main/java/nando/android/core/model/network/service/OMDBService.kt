@@ -9,7 +9,8 @@ interface OMDBService {
 
     @GET
     fun searchMovies(
-        @Query("s") query: String
+        @Query("s") query: String,
+        @Query("page") page: String
     ): MoviesSearchResponse
 
     @GET

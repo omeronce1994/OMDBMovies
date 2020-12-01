@@ -3,7 +3,7 @@ package nando.android.core.model.network.response.moviesearch
 
 import com.google.gson.annotations.SerializedName
 
-data class Search(
+data class MovieSearchResult(
     @SerializedName("imdbID")
     val imdbID: String = "",
     @SerializedName("Poster")

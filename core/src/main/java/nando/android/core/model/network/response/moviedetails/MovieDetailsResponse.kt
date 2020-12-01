@@ -16,6 +16,8 @@ data class MovieDetailsResponse(
     val dVD: String = "",
     @SerializedName("Director")
     val director: String = "",
+    @SerializedName("Error")
+    val errorMessage: String = "",
     @SerializedName("Genre")
     val genre: String = "",
     @SerializedName("imdbID")
@@ -41,7 +43,7 @@ data class MovieDetailsResponse(
     @SerializedName("Released")
     val released: String = "",
     @SerializedName("Response")
-    val response: String = "",
+    val isSuccessful: String = "",
     @SerializedName("Runtime")
     val runtime: String = "",
     @SerializedName("Title")

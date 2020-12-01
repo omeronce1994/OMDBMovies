@@ -10,7 +10,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val networkModule = module {
+internal val networkModule = module {
 
     single {
         OmdbInterceptor(API_KEY)

@@ -4,16 +4,23 @@ import nando.android.core.data.datasource.DataSourceType
 import nando.android.core.data.datasource.moviedetails.LocalMovieDetailsDataSource
 import nando.android.core.data.datasource.moviedetails.MovieDetailsDataSource
 import nando.android.core.data.datasource.moviedetails.RemoteMovieDetailsDataSource
+import nando.android.core.data.datasource.moviesearch.MovieSearchDataSource
+import nando.android.core.data.datasource.moviesearch.RemoteMovieSearchDataSource
 import org.koin.dsl.module
 
-val moviesDataSourceModule = module {
+internal val moviesDataSourceModule = module {
+
+    factory<MovieSearchDataSource> {
+        RemoteMovieSearchDataSource(get())
+    }
 
     factory<MovieDetailsDataSource> { (type: DataSourceType) ->
-        when(type) {
+        when (type) {
             DataSourceType.LOCAL -> get<LocalMovieDetailsDataSource>()
             else -> RemoteMovieDetailsDataSource(get(), get())
         }
     }
+
     single {
         LocalMovieDetailsDataSource(get())
     }

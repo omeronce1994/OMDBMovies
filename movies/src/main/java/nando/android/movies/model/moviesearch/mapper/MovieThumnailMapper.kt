@@ -13,19 +13,15 @@ class MovieThumnailMapper(
     private val localDataSource: MovieDetailsDataSource
 ): Mapper<MovieSearchResult, MovieThumbnailModel> {
 
-    private val TAG = "MovieThumnailMapper"
-
     override suspend fun map(from: MovieSearchResult): MovieThumbnailModel {
         val id = from.imdbID
         var result: Resource<MovieEntity> = Resource.Loading()
-        Log.i(TAG, "map: call collect")
         localDataSource.getMovieById(id).collect {
             result = it
-            Log.i(TAG, "map: clloected")
         }
-        Log.i(TAG, "map: after collect called")
         val isFavourite = result is Resource.Success<*>
         return MovieThumbnailModel(
+            from.imdbID,
             from.year,
             from.poster,
             isFavourite

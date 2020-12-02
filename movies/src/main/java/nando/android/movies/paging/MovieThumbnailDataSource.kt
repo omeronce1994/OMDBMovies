@@ -16,7 +16,8 @@ class MovieThumbnailDataSource(
     private val scope: CoroutineScope,
     private val mapper: Mapper<MovieSearchResult, MovieThumbnailModel>,
     private val query: String,
-    private val initialPage: Int = INITIAL_PAGE
+    private val initialPage: Int = INITIAL_PAGE,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): PageKeyedDataSource<Int, MovieThumbnailModel>() {
 
     private val TAG = "MovieThumbnailDataSourc"
@@ -27,7 +28,7 @@ class MovieThumbnailDataSource(
     ) {
         scope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.i(TAG, "loadInitial: ${throwable.message}")
-        }) {
+        } + dispatcher) {
             Log.i(TAG, "loadInitial: ${isActive} ${isActive}")
             repository.searchMovie(query, initialPage).collect {
                 when(it) {
@@ -48,7 +49,7 @@ class MovieThumbnailDataSource(
     ) {
         scope.launch (CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.i(TAG, "loadAfter: ${throwable.message}")
-        }){
+        } + dispatcher){
             Log.i(TAG, "loadAfter: ")
             repository.searchMovie(query, params.key).collect {
                 when(it) {

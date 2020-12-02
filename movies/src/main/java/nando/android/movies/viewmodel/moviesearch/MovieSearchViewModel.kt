@@ -1,4 +1,4 @@
-package nando.android.movies.viewmodel
+package nando.android.movies.viewmodel.moviesearch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -8,5 +8,21 @@
     <fragment
         android:id="@+id/movieSearchFragment"
         android:name="nando.android.movies.ui.moviesearch.MovieSearchFragment"
-        tools:layout="@layout/fragment_movie_search"/>
+        tools:layout="@layout/fragment_movie_search">
+        <action
+            android:id="@+id/action_movieSearchFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="nando.android.movies.ui.moviedetails.MovieDetailsFragment"
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="movieId"
+            app:argType="string"/>
+    </fragment>
 </navigation>

@@ -3,6 +3,7 @@ package nando.android.movies.model.moviesearch
 import androidx.recyclerview.widget.DiffUtil
 
 data class MovieThumbnailModel(
+    val imdbID: String,
     val released: String,
     val imagePath: String,
     val isFavourite: Boolean

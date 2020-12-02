@@ -13,7 +13,7 @@ import nando.android.movies.paging.MovieThumbnailDataSource
 import nando.android.movies.paging.MovieThumbnailDataSourceFactory
 import nando.android.movies.ui.moviesearch.MovieSearchListAdapter
 import nando.android.movies.util.MoviesConstants.PAGE_SIZE
-import nando.android.movies.viewmodel.MovieSearchViewModel
+import nando.android.movies.viewmodel.moviesearch.MovieSearchViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
@@ -44,7 +44,7 @@ val movieSearchModule = module {
         )
     }
 
-    factory<PagedListAdapter<MovieThumbnailModel, MovieSearchListAdapter.MovieViewHolder>> {
+    factory {
         MovieSearchListAdapter()
     }
 }

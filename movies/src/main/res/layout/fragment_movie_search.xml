@@ -55,4 +55,11 @@
         android:backgroundTint="@color/teal_200"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_menu_search"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:lottie_rawRes="@raw/movie_loading"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

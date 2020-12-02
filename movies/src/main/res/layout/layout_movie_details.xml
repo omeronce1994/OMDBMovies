@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/black">
+
+    <TextView
+        android:id="@+id/text_runtime_release_and_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="2001, 120"/>
+
+    <TextView
+        android:id="@+id/text_director"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="james james"/>
+
+    <TextView
+        android:id="@+id/text_actors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="james james"/>
+
+    <TextView
+        android:id="@+id/text_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="jdsfbsfdkjbfdskbfhjfgbdjhfdgbhfdjgbfdgk fkjv jbkfd bkj bkj bvk vkcvxnvcx"/>
+
+    <TextView
+        android:id="@+id/text_metascore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="91"/>
+
+
+</LinearLayout>

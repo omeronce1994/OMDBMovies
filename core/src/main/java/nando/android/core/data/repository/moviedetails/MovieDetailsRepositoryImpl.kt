@@ -11,12 +11,12 @@ class MovieDetailsRepositoryImpl(
 ): MovieDetailsRepository {
 
     override suspend fun getMovieById(imdbId: String): Flow<Resource<MovieEntity>> = flow {
-        localDataSource.getMovieById(imdbId).onEach {
+        localDataSource.getMovieById(imdbId).collect {
             if (it is Resource.Success) {
                 emit(it)
             }
         }
-        remoteDataSource.getMovieById(imdbId).onEach {
+        remoteDataSource.getMovieById(imdbId).collect {
             if (it is Resource.Success) {
                 localDataSource.saveMovie(it.data)
             }

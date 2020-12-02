@@ -8,6 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.fragment_movie_search.*
+import nando.android.core.util.extensions.hideKeyboard
+import nando.android.core.util.extensions.showKeyboard
 import nando.android.movies.R
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 import nando.android.movies.viewmodel.MovieSearchViewModel
@@ -22,6 +24,7 @@ class MovieSearchFragment: Fragment(R.layout.fragment_movie_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setClickListeners()
         setTextChangeListeners()
         initRecycler()
     }
@@ -39,6 +42,18 @@ class MovieSearchFragment: Fragment(R.layout.fragment_movie_search) {
     private fun setTextChangeListeners() {
         input_search.doOnTextChanged { text, start, before, count ->
             viewModel.search(text.toString())
+        }
+    }
+
+    private fun setClickListeners() {
+        fab.setOnClickListener {
+            fab.isExpanded = true
+            input_search.showKeyboard()
+            input_search.requestFocus()
+        }
+        image_close.setOnClickListener {
+            fab.isExpanded = false
+            input_search.hideKeyboard()
         }
     }
 

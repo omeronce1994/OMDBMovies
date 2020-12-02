@@ -38,7 +38,7 @@ class MovieSearchListAdapter: PagedListAdapter<MovieThumbnailModel, MovieSearchL
                 R.drawable.ic_star_grey
             }
             image_favourite.setImageResource(favIconRes)
-            Picasso.get().load(item.imagePath).fit().into(img_movie)
+            Picasso.get().load(item.imagePath).placeholder(R.drawable.movie_placeholder).fit().into(img_movie)
         }
     }
 }

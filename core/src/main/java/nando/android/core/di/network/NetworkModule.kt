@@ -1,7 +1,6 @@
 package nando.android.core.di.network
 
 import nando.android.core.BuildConfig
-import nando.android.core.model.network.authenticator.OMDBAuthenticator
 import nando.android.core.model.network.interceptors.OmdbInterceptor
 import nando.android.core.model.network.service.OMDBService
 import nando.android.core.util.CoreConstants.API_KEY
@@ -11,16 +10,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 internal val networkModule = module {
 
     single {
         OmdbInterceptor(API_KEY)
-    }
-
-    single {
-        OMDBAuthenticator(API_KEY)
     }
 
     single {

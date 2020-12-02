@@ -7,6 +7,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * Utility method to debounce text changes.
+ * execute action only after some delay and only if text hadnt change in that time
+ * Especially useful when we need to make
+ * api calls on text changes.
+ *
+ * @param debounce
+ * @param scope
+ * @param listener
+ */
 fun TextView.debounceTextChange(
     debounce: Long = 300,
     scope: CoroutineScope,

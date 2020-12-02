@@ -1,6 +1,5 @@
 package nando.android.movies.ui.moviedetails
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,9 +20,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MovieDetailsFragment: Fragment(R.layout.fragment_movie_details) {
 
     private val viewModel: MovieDetailsViewModel by viewModel()
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(context).apply { setCancelable(false) }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +54,7 @@ class MovieDetailsFragment: Fragment(R.layout.fragment_movie_details) {
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
             when(it.state) {
                 is MovieDetailsViewModel.ViewState.ShowDetails -> renderDetails(it.data)
-                is MovieDetailsViewModel.ViewState.Error -> showErrorToast(it.errorHandler.errorMessage(context))
+                is MovieDetailsViewModel.ViewState.Error -> handleError(it.errorHandler.errorMessage(context))
                 is MovieDetailsViewModel.ViewState.Loading -> {
                     showLoading()
                 }
@@ -85,7 +81,8 @@ class MovieDetailsFragment: Fragment(R.layout.fragment_movie_details) {
         hideLoading()
     }
 
-    private fun showErrorToast(message: String) {
+    private fun handleError(message: String) {
+        hideLoading()
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 

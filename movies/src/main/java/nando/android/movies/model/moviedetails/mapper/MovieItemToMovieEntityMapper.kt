@@ -4,6 +4,10 @@ import nando.android.core.mapper.Mapper
 import nando.android.core.model.db.entities.MovieEntity
 import nando.android.movies.model.moviedetails.MovieItemModel
 
+/**
+ * Mapper to map our feature model back to our db model
+ *
+ */
 class MovieItemToMovieEntityMapper: Mapper<MovieItemModel, MovieEntity> {
 
     override suspend fun map(from: MovieItemModel): MovieEntity

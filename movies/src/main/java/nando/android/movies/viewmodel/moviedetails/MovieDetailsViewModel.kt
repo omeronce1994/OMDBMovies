@@ -25,6 +25,7 @@ class MovieDetailsViewModel(
     private var movieItemModel = MutableLiveData<MovieItemModel>()
 
     init {
+        //update ui when movie model is update
         _liveData.addSource(movieItemModel, Observer {
             _liveData.postValue(UiState(ViewState.ShowDetails, data = it))
         })
@@ -112,12 +113,23 @@ class MovieDetailsViewModel(
         }
     }
 
+    /**
+     * raw data class to represent the ui
+     *
+     * @property state
+     * @property data
+     * @property errorHandler
+     */
     data class UiState(
         val state: ViewState = ViewState.Loading,
         val data: MovieItemModel = MovieItemModel(),
         val errorHandler: ErrorHandler = LocalizedErrorHandler(0)
     )
 
+    /**
+     * sealed class to represent view possible states
+     *
+     */
     sealed class ViewState {
         object Loading : ViewState()
         object ShowDetails : ViewState()

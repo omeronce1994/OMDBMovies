@@ -9,6 +9,11 @@ import nando.android.core.model.db.entities.MovieEntity
 import nando.android.core.model.network.response.moviesearch.MovieSearchResult
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 
+/**
+ * Mapper to map db model to feature model
+ *
+ * @property localDataSource
+ */
 class MovieThumnailMapper(
     private val localDataSource: MovieDetailsDataSource
 ): Mapper<MovieSearchResult, MovieThumbnailModel> {
@@ -16,6 +21,7 @@ class MovieThumnailMapper(
     override suspend fun map(from: MovieSearchResult): MovieThumbnailModel {
         val id = from.imdbID
         var result: Resource<MovieEntity> = Resource.Loading()
+        //if movie is in db mark it as favourite
         localDataSource.getMovieById(id).collect {
             result = it
         }

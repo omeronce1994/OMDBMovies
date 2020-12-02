@@ -23,20 +23,23 @@ class MovieThumbnailDataSource(
 ): PageKeyedDataSource<Int, MovieThumbnailModel>() {
 
     private val TAG = "MovieThumbnailDataSourc"
-    private val _networkState = MutableStateFlow<Resource<Int>>(Resource.Success(0))
+
+    //flow used to observe state of pagination api calls
+    private val _networkState = MutableStateFlow<Resource<Int>>(Resource.Loading())
     val networkState: Flow<Resource<Int>> = _networkState
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, MovieThumbnailModel>
     ) {
+        //avoid executing api call for empty query
         if (query.isEmpty()) {
+            _networkState.value = Resource.Success(0)
             return
         }
         scope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.i(TAG, "loadInitial: ${throwable.message}")
         } + dispatcher) {
-            Log.i(TAG, "loadInitial: ${isActive} ${isActive}")
             repository.searchMovie(query, initialPage).collect {
                 when(it) {
                     is Resource.Success -> {
@@ -61,6 +64,7 @@ class MovieThumbnailDataSource(
         callback: LoadCallback<Int, MovieThumbnailModel>
     ) {
         if (query.isEmpty()) {
+            _networkState.value = Resource.Success(0)
             return
         }
         scope.launch (CoroutineExceptionHandler { coroutineContext, throwable ->

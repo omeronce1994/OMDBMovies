@@ -6,7 +6,7 @@ import nando.android.core.model.network.response.moviesearch.MoviesSearchRespons
 
 /**
  * For movie search data source we return network response object
- * as our single source of truth in this use case is the network(no local or cache)
+ * as our single source of truth in this use case is the network(no local db or cache)
  *
  */
 interface MovieSearchDataSource {

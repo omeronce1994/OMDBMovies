@@ -14,6 +14,9 @@ internal val moviesDataSourceModule = module {
         RemoteMovieSearchDataSource(get())
     }
 
+    /**
+     * factory to choose wich data source instance to inject
+     */
     factory<MovieDetailsDataSource> { (type: DataSourceType) ->
         when (type) {
             DataSourceType.LOCAL -> get<LocalMovieDetailsDataSource>()
@@ -21,6 +24,9 @@ internal val moviesDataSourceModule = module {
         }
     }
 
+    /**
+     * Local db will be used as singleton
+     */
     single {
         LocalMovieDetailsDataSource(get())
     }

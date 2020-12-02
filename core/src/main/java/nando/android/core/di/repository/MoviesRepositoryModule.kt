@@ -12,6 +12,9 @@ import org.koin.dsl.module
 
 internal val moviesRepositoryModule = module {
 
+    /**
+     * factory to choose which data source type to inject
+     */
     factory<MovieDetailsRepository> {
         MovieDetailsRepositoryImpl(
             get<MovieDetailsDataSource> { parametersOf(DataSourceType.LOCAL) },

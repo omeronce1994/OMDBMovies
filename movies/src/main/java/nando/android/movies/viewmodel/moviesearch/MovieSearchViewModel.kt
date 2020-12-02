@@ -9,6 +9,7 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import nando.android.core.model.Resource
@@ -34,10 +35,12 @@ class MovieSearchViewModel(
     val uiState: LiveData<UiState> = _uiState
 
     init {
+        //each time paged data source instance is created we are notified about it
+        //using flatMapLatest, then we can observe the new instance's network state
         viewModelScope.launch(dispatcher) {
             pagedFactory.sourceFlow.flatMapLatest { dataSource ->
                 dataSource.networkState
-            }.collect {
+            }.distinctUntilChanged().collect {
                 when(it) {
                     is Resource.Loading -> {
                         _uiState.postValue(UiState(ViewState.Loading))

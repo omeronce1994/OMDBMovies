@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 internal val networkModule = module {
 
@@ -24,22 +25,24 @@ internal val networkModule = module {
 
     single {
         HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }
     }
 
     single {
-        val builder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
-             builder.addInterceptor(get<HttpLoggingInterceptor>())
-        }
-        builder.build()
+        OkHttpClient.Builder().apply {
+            addInterceptor(get<OmdbInterceptor>())
+            if (BuildConfig.DEBUG) {
+                addInterceptor(get<HttpLoggingInterceptor>())
+            }
+        }.build()
     }
 
     single {
         Retrofit.Builder()
             .baseUrl(OMDB_BASE_API)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(get<OkHttpClient>())
             .build()
     }
 

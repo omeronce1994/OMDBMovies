@@ -2,11 +2,8 @@ package nando.android.movies.paging
 
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import nando.android.core.data.repository.moviesearch.MovieSearchRepository
 import nando.android.core.mapper.Mapper
 import nando.android.core.model.Resource
@@ -18,16 +15,11 @@ class MovieThumbnailDataSource(
     private val repository: MovieSearchRepository,
     private val scope: CoroutineScope,
     private val mapper: Mapper<MovieSearchResult, MovieThumbnailModel>,
+    private val query: String,
     private val initialPage: Int = INITIAL_PAGE
 ): PageKeyedDataSource<Int, MovieThumbnailModel>() {
 
     private val TAG = "MovieThumbnailDataSourc"
-
-    var query: String = ""
-        set(value) {
-            field = value
-            invalidate()
-        }
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
@@ -44,9 +36,6 @@ class MovieThumbnailDataSource(
                             mapper.map(movieEntity)
                         }
                         callback.onResult(items, null, initialPage + 1)
-                    }
-                    is Resource.Error -> {
-                        callback.onResult(listOf(), null, initialPage + 1)
                     }
                 }
             }

@@ -15,7 +15,7 @@ class RemoteMovieSearchDataSource(
 
     override suspend fun searchMovie(query: String, page: Int) = flow {
         val result = safeApiCall {
-            val response = api.searchMovies(query, page.toString(), CoreConstants.API_KEY)
+            val response = api.searchMovies(query, page.toString())
             if (response.isSuccessful == OMBD_FAILED_RESPONSE) {
                 throw Exception(response.errorMessage)
             }

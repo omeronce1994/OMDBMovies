@@ -33,11 +33,15 @@ val movieSearchModule = module {
         )
     }
 
-    factory { (scope: CoroutineScope) ->
-        val dataSource = provideMovieThumbnailPagedDataSource(
-            get(),scope, get()
+    factory { (scope: CoroutineScope, query: String) ->
+        val dataSource = get<MovieThumbnailDataSource>{ parametersOf(scope, query)}
+        provideMovieSearchDataFactory(dataSource, scope)
+    }
+
+    factory { (scope: CoroutineScope, query: String) ->
+        provideMovieThumbnailPagedDataSource(
+            get(),scope, get(), query
         )
-        provideMovieSearchDataFactory(dataSource)
     }
 
     factory<PagedListAdapter<MovieThumbnailModel, MovieSearchListAdapter.MovieViewHolder>> {
@@ -45,17 +49,19 @@ val movieSearchModule = module {
     }
 }
 
-fun provideMovieSearchDataFactory(dataSource: MovieThumbnailDataSource) =
-    MovieThumbnailDataSourceFactory(dataSource)
+fun provideMovieSearchDataFactory(dataSource: MovieThumbnailDataSource, scope: CoroutineScope) =
+    MovieThumbnailDataSourceFactory(dataSource, scope)
 
 fun provideMovieThumbnailPagedDataSource(
     repository: MovieSearchRepository,
     scope: CoroutineScope,
-    mapper: Mapper<MovieSearchResult, MovieThumbnailModel>
+    mapper: Mapper<MovieSearchResult, MovieThumbnailModel>,
+    query: String
 ) = MovieThumbnailDataSource(
     repository,
     scope,
-    mapper
+    mapper,
+    query
 )
 
 fun providePagedConfig() = PagedList.Config.Builder()

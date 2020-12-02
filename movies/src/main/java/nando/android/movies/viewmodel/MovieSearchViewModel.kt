@@ -20,7 +20,7 @@ class MovieSearchViewModel(
     val data = LivePagedListBuilder(pagedFactory, config).build()
 
     fun search(query: String) {
-        pagedFactory.sourceFlow.value.query = query
+        pagedFactory.query = query
         viewModelScope
     }
 

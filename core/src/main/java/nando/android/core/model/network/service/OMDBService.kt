@@ -10,8 +10,7 @@ interface OMDBService {
     @GET(".")
     suspend fun searchMovies(
         @Query("s") query: String,
-        @Query("page") page: String,
-        @Query("apikey") apiKey: String
+        @Query("page") page: String
     ): MoviesSearchResponse
 
     @GET(".")

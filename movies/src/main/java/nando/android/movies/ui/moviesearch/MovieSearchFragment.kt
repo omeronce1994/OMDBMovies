@@ -4,13 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.lottie.LottieDrawable
+import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.fragment_movie_search.*
+import kotlinx.android.synthetic.main.fragment_movie_search.fab
+import kotlinx.android.synthetic.main.fragment_movie_search.lottie_progress
+import nando.android.core.util.extensions.debounceTextChange
 import nando.android.core.util.extensions.hideKeyboard
 import nando.android.core.util.extensions.showKeyboard
 import nando.android.movies.R
@@ -37,6 +44,7 @@ class MovieSearchFragment: Fragment() {
         setClickListeners()
         setTextChangeListeners()
         initRecycler()
+        lottie_progress.repeatCount = LottieDrawable.INFINITE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,8 +58,8 @@ class MovieSearchFragment: Fragment() {
     }
 
     private fun setTextChangeListeners() {
-        input_search.doOnTextChanged { text, start, before, count ->
-            viewModel.search(text.toString())
+        input_search.debounceTextChange(scope = lifecycleScope) {
+            viewModel.search(it)
         }
         adapter.clickListener = {
             findNavController().navigate(MovieSearchFragmentDirections.actionMovieSearchFragmentToMovieDetailsFragment(it.imdbID))
@@ -72,7 +80,32 @@ class MovieSearchFragment: Fragment() {
 
     private fun observe() {
         viewModel.data.observe(viewLifecycleOwner, Observer {
+            hideLoading()
             adapter.submitList(it)
         })
+        viewModel.uiState.observe(viewLifecycleOwner, Observer {
+            when(it.state) {
+                is MovieSearchViewModel.ViewState.Loading -> showLoading()
+                is MovieSearchViewModel.ViewState.Error -> {
+                    hideLoading()
+                    showError(it.errorHandler.errorMessage())
+                }
+                is MovieSearchViewModel.ViewState.Success -> hideLoading()
+            }
+        })
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showLoading() {
+        lottie_progress.visibility = View.VISIBLE
+        lottie_progress.playAnimation()
+    }
+
+    private fun hideLoading() {
+        lottie_progress.visibility = View.GONE
+        lottie_progress.cancelAnimation()
     }
 }

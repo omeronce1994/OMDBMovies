@@ -3,6 +3,8 @@ package nando.android.movies.paging
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import nando.android.core.data.repository.moviesearch.MovieSearchRepository
 import nando.android.core.mapper.Mapper
@@ -21,11 +23,16 @@ class MovieThumbnailDataSource(
 ): PageKeyedDataSource<Int, MovieThumbnailModel>() {
 
     private val TAG = "MovieThumbnailDataSourc"
+    private val _networkState = MutableStateFlow<Resource<Int>>(Resource.Success(0))
+    val networkState: Flow<Resource<Int>> = _networkState
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, MovieThumbnailModel>
     ) {
+        if (query.isEmpty()) {
+            return
+        }
         scope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.i(TAG, "loadInitial: ${throwable.message}")
         } + dispatcher) {
@@ -38,6 +45,12 @@ class MovieThumbnailDataSource(
                         }
                         callback.onResult(items, null, initialPage + 1)
                     }
+                    is Resource.Error -> {
+                        _networkState.value = Resource.Error(it.errorHandler)
+                    }
+                    else -> {
+                        _networkState.value = Resource.Loading()
+                    }
                 }
             }
         }
@@ -47,18 +60,25 @@ class MovieThumbnailDataSource(
         params: LoadParams<Int>,
         callback: LoadCallback<Int, MovieThumbnailModel>
     ) {
+        if (query.isEmpty()) {
+            return
+        }
         scope.launch (CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.i(TAG, "loadAfter: ${throwable.message}")
         } + dispatcher){
-            Log.i(TAG, "loadAfter: ")
             repository.searchMovie(query, params.key).collect {
                 when(it) {
                     is Resource.Success -> {
+                        _networkState.value = Resource.Success(0)
                         val items = it.data.searchResults.map {movieEntity ->
                             mapper.map(movieEntity)
                         }
                         callback.onResult(items, params.key + 1)
                     }
+                    is Resource.Error -> {
+                        _networkState.value = Resource.Error(it.errorHandler)
+                    }
+                    else -> { }
                 }
             }
         }

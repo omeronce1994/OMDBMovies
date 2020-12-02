@@ -7,14 +7,15 @@ import retrofit2.http.Query
 
 interface OMDBService {
 
-    @GET
-    fun searchMovies(
+    @GET(".")
+    suspend fun searchMovies(
         @Query("s") query: String,
-        @Query("page") page: String
+        @Query("page") page: String,
+        @Query("apikey") apiKey: String
     ): MoviesSearchResponse
 
-    @GET
-    fun getMovieById(
+    @GET(".")
+    suspend fun getMovieById(
         @Query("i") movieId: String
     ): MovieDetailsResponse
 }

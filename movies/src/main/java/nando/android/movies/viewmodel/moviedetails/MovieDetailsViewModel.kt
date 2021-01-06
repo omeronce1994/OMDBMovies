@@ -22,7 +22,7 @@ class MovieDetailsViewModel(
 
     private val _liveData = MediatorLiveData<UiState>()
     val liveData: LiveData<UiState> = _liveData
-    private var movieItemModel = MutableLiveData<MovieItemModel>()
+    private val movieItemModel = MutableLiveData<MovieItemModel>()
 
     init {
         //update ui when movie model is update

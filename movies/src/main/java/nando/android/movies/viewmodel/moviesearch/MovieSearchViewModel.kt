@@ -15,19 +15,14 @@ import kotlinx.coroutines.launch
 import nando.android.core.model.Resource
 import nando.android.core.model.error.ErrorHandler
 import nando.android.core.model.error.LocalizedErrorHandler
-import nando.android.movies.paging.MovieThumbnailDataSourceFactory
+import nando.android.movies.paging.MovieThumbnailPagingDataSourceFactory
 import org.koin.core.KoinComponent
-import org.koin.core.inject
-import org.koin.core.parameter.parametersOf
 
 class MovieSearchViewModel(
     config: PagedList.Config,
+    private val pagedFactory: MovieThumbnailPagingDataSourceFactory,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel(), KoinComponent {
-
-    private val pagedFactory: MovieThumbnailDataSourceFactory by inject {
-        parametersOf(viewModelScope, "")
-    }
 
     val data = LivePagedListBuilder(pagedFactory, config).build()
 
@@ -62,6 +57,11 @@ class MovieSearchViewModel(
 
     fun search(query: String) {
         pagedFactory.query = query
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        pagedFactory.release()
     }
 
     data class UiState(

@@ -14,7 +14,7 @@ import nando.android.core.model.network.response.moviesearch.MovieSearchResult
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 import nando.android.movies.util.MoviesConstants.INITIAL_PAGE
 
-class MovieThumbnailDataSource(
+class MovieThumbnailPagingDataSource(
     private val repository: MovieSearchRepository,
     private val scope: CoroutineScope,
     private val mapper: Mapper<MovieModel, MovieThumbnailModel>,

@@ -2,13 +2,15 @@ package nando.android.movies.di.moviesearch
 
 import androidx.paging.PagedList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import nando.android.core.data.repository.moviesearch.MovieSearchRepository
 import nando.android.core.mapper.Mapper
 import nando.android.core.model.movies.MovieModel
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 import nando.android.movies.model.moviesearch.mapper.MovieModelToMovieThumnailMapper
-import nando.android.movies.paging.MovieThumbnailDataSource
-import nando.android.movies.paging.MovieThumbnailDataSourceFactory
+import nando.android.movies.paging.MovieThumbnailPagingDataSource
+import nando.android.movies.paging.MovieThumbnailPagingDataSourceFactory
 import nando.android.movies.ui.moviesearch.MovieSearchListAdapter
 import nando.android.movies.util.MoviesConstants.PAGE_SIZE
 import nando.android.movies.viewmodel.moviesearch.MovieSearchViewModel
@@ -24,16 +26,21 @@ val movieSearchModule = module {
     }
 
     viewModel {
+        //create couroutine scope that will cancel all its childer by using SupervisedJob
+        val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         MovieSearchViewModel(
-            providePagedConfig()
+            providePagedConfig(),
+            get { parametersOf(coroutineScope, "") }
         )
     }
 
+    //inject paging data spurce factory
     factory { (scope: CoroutineScope, query: String) ->
-        val dataSource = get<MovieThumbnailDataSource>{ parametersOf(scope, query)}
+        val dataSource = get<MovieThumbnailPagingDataSource>{ parametersOf(scope, query)}
         provideMovieSearchDataFactory(dataSource, scope)
     }
 
+    //inject paging data source
     factory { (scope: CoroutineScope, query: String) ->
         provideMovieThumbnailPagedDataSource(
             get(),scope, get(), query
@@ -45,15 +52,15 @@ val movieSearchModule = module {
     }
 }
 
-fun provideMovieSearchDataFactory(dataSource: MovieThumbnailDataSource, scope: CoroutineScope) =
-    MovieThumbnailDataSourceFactory(dataSource, scope)
+fun provideMovieSearchDataFactory(dataSource: MovieThumbnailPagingDataSource, scope: CoroutineScope) =
+    MovieThumbnailPagingDataSourceFactory(dataSource, scope)
 
 fun provideMovieThumbnailPagedDataSource(
     repository: MovieSearchRepository,
     scope: CoroutineScope,
     mapper: Mapper<MovieModel, MovieThumbnailModel>,
     query: String
-) = MovieThumbnailDataSource(
+) = MovieThumbnailPagingDataSource(
     repository,
     scope,
     mapper,

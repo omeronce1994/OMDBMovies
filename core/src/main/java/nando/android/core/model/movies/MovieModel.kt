@@ -11,5 +11,7 @@ data class MovieModel (
     val plot: String = "",
     val metaScore: String = "",
     val imagePath: String = "",
-    val isFavourite: Boolean = false
+    val isFavourite: Boolean = false,
+    val type: String = "",
+    val year: String = ""
 )

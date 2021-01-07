@@ -10,12 +10,12 @@ import nando.android.core.model.Resource
 import nando.android.core.model.error.ErrorHandler
 import nando.android.core.model.error.LocalizedErrorHandler
 import nando.android.movies.model.moviedetails.MovieDetailsModel
-import nando.android.movies.model.moviedetails.mapper.MovieItemMapper
+import nando.android.movies.model.moviedetails.mapper.MovieModelToMovieDetailsMapper
 import nando.android.movies.model.moviedetails.mapper.MovieDetailsToMovieModelMapper
 
 class MovieDetailsViewModel(
     private val repository: MovieDetailsRepository,
-    private val mapper: MovieItemMapper,
+    private val mapper: MovieModelToMovieDetailsMapper,
     private val reveresedMapper: MovieDetailsToMovieModelMapper,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {

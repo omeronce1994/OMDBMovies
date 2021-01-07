@@ -1,14 +1,12 @@
 package nando.android.movies.di.moviesearch
 
 import androidx.paging.PagedList
-import androidx.paging.PagedListAdapter
 import kotlinx.coroutines.CoroutineScope
-import nando.android.core.data.datasource.DataSourceType
 import nando.android.core.data.repository.moviesearch.MovieSearchRepository
 import nando.android.core.mapper.Mapper
-import nando.android.core.model.network.response.moviesearch.MovieSearchResult
+import nando.android.core.model.movies.MovieModel
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
-import nando.android.movies.model.moviesearch.mapper.MovieThumnailMapper
+import nando.android.movies.model.moviesearch.mapper.MovieModelToMovieThumnailMapper
 import nando.android.movies.paging.MovieThumbnailDataSource
 import nando.android.movies.paging.MovieThumbnailDataSourceFactory
 import nando.android.movies.ui.moviesearch.MovieSearchListAdapter
@@ -21,10 +19,8 @@ import org.koin.dsl.module
 
 val movieSearchModule = module {
 
-    factory<Mapper<MovieSearchResult, MovieThumbnailModel>> {
-        MovieThumnailMapper(
-            get { parametersOf(DataSourceType.LOCAL) }
-        )
+    factory<Mapper<MovieModel, MovieThumbnailModel>> {
+        MovieModelToMovieThumnailMapper()
     }
 
     viewModel {
@@ -55,7 +51,7 @@ fun provideMovieSearchDataFactory(dataSource: MovieThumbnailDataSource, scope: C
 fun provideMovieThumbnailPagedDataSource(
     repository: MovieSearchRepository,
     scope: CoroutineScope,
-    mapper: Mapper<MovieSearchResult, MovieThumbnailModel>,
+    mapper: Mapper<MovieModel, MovieThumbnailModel>,
     query: String
 ) = MovieThumbnailDataSource(
     repository,

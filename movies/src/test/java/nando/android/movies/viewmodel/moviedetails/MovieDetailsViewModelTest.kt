@@ -1,23 +1,20 @@
 package nando.android.movies.viewmodel.moviedetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import nando.android.core.data.datasource.moviedetails.MovieDetailsDataSource
 import nando.android.core.data.repository.moviedetails.MovieDetailsRepository
 import nando.android.core.model.Resource
-import nando.android.core.model.db.entities.MovieEntity
 import nando.android.core.model.error.ExceptionErrorHandler
 import nando.android.core.model.movies.MovieModel
 import nando.android.movies.MainCoroutineRule
 import nando.android.movies.MockedMovieDetailsRepository
 import nando.android.movies.getOrAwaitValue
-import nando.android.movies.model.moviedetails.mapper.MovieItemMapper
+import nando.android.movies.model.moviedetails.mapper.MovieModelToMovieDetailsMapper
 import nando.android.movies.model.moviedetails.mapper.MovieDetailsToMovieModelMapper
 import org.junit.Test
 
@@ -45,7 +42,7 @@ class MovieDetailsViewModelTest {
         repository = spy(MockedMovieDetailsRepository())
         viewModel = MovieDetailsViewModel(
             repository,
-            MovieItemMapper(),
+            MovieModelToMovieDetailsMapper(),
             MovieDetailsToMovieModelMapper(),
             TestCoroutineDispatcher()
         )
@@ -71,7 +68,7 @@ class MovieDetailsViewModelTest {
     @Test
     fun `verify UiState data is correct when getting movie by id`() = mainCoroutineRule.runBlockingTest {
         val movie = MovieModel("11", "test")
-        val expected = MovieItemMapper().map(movie)
+        val expected = MovieModelToMovieDetailsMapper().map(movie)
         repository.saveMovie(movie).collect {  }
         viewModel.getMovie("11")
         assertEquals(viewModel.liveData.getOrAwaitValue {  }.data, expected)

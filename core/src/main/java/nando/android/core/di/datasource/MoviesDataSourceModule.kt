@@ -12,7 +12,10 @@ import org.koin.dsl.module
 internal val moviesDataSourceModule = module {
 
     factory<MovieSearchDataSource> {
-        RemoteMovieSearchDataSource(get())
+        RemoteMovieSearchDataSource(
+            get(),
+            get { parametersOf(DataSourceType.LOCAL) }
+        )
     }
 
     /**

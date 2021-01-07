@@ -9,20 +9,20 @@ import nando.android.core.data.repository.moviedetails.MovieDetailsRepository
 import nando.android.core.model.Resource
 import nando.android.core.model.error.ErrorHandler
 import nando.android.core.model.error.LocalizedErrorHandler
-import nando.android.movies.model.moviedetails.MovieItemModel
-import nando.android.movies.model.moviedetails.mapper.MovieItemMapper
-import nando.android.movies.model.moviedetails.mapper.MovieItemToMovieEntityMapper
+import nando.android.movies.model.moviedetails.MovieDetailsModel
+import nando.android.movies.model.moviedetails.mapper.MovieModelToMovieDetailsMapper
+import nando.android.movies.model.moviedetails.mapper.MovieDetailsToMovieModelMapper
 
 class MovieDetailsViewModel(
     private val repository: MovieDetailsRepository,
-    private val mapper: MovieItemMapper,
-    private val reveresedMapper: MovieItemToMovieEntityMapper,
+    private val mapper: MovieModelToMovieDetailsMapper,
+    private val reveresedMapper: MovieDetailsToMovieModelMapper,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
 
     private val _liveData = MediatorLiveData<UiState>()
     val liveData: LiveData<UiState> = _liveData
-    private val movieItemModel = MutableLiveData<MovieItemModel>()
+    private val movieItemModel = MutableLiveData<MovieDetailsModel>()
 
     init {
         //update ui when movie model is update
@@ -67,7 +67,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun saveMovie(current: MovieItemModel) {
+    private fun saveMovie(current: MovieDetailsModel) {
         _liveData.value = UiState(ViewState.Loading)
         viewModelScope.launch(coroutineDispatcher) {
             val newEntity = reveresedMapper.map(current)
@@ -90,7 +90,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun deleteMovie(current: MovieItemModel) {
+    private fun deleteMovie(current: MovieDetailsModel) {
         _liveData.value = UiState(ViewState.Loading)
         viewModelScope.launch(coroutineDispatcher) {
             val removedEntity = reveresedMapper.map(current)
@@ -122,7 +122,7 @@ class MovieDetailsViewModel(
      */
     data class UiState(
         val state: ViewState = ViewState.Loading,
-        val data: MovieItemModel = MovieItemModel(),
+        val data: MovieDetailsModel = MovieDetailsModel(),
         val errorHandler: ErrorHandler = LocalizedErrorHandler(0)
     )
 

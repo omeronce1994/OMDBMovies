@@ -9,14 +9,15 @@ import kotlinx.coroutines.flow.collect
 import nando.android.core.data.repository.moviesearch.MovieSearchRepository
 import nando.android.core.mapper.Mapper
 import nando.android.core.model.Resource
+import nando.android.core.model.movies.MovieModel
 import nando.android.core.model.network.response.moviesearch.MovieSearchResult
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 import nando.android.movies.util.MoviesConstants.INITIAL_PAGE
 
-class MovieThumbnailDataSource(
+class MovieThumbnailPagingDataSource(
     private val repository: MovieSearchRepository,
     private val scope: CoroutineScope,
-    private val mapper: Mapper<MovieSearchResult, MovieThumbnailModel>,
+    private val mapper: Mapper<MovieModel, MovieThumbnailModel>,
     private val query: String,
     private val initialPage: Int = INITIAL_PAGE,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -43,8 +44,8 @@ class MovieThumbnailDataSource(
             repository.searchMovie(query, initialPage).collect {
                 when(it) {
                     is Resource.Success -> {
-                        val items = it.data.searchResults.map {movieEntity ->
-                            mapper.map(movieEntity)
+                        val items = it.data.map {movie ->
+                            mapper.map(movie)
                         }
                         callback.onResult(items, null, initialPage + 1)
                     }
@@ -74,8 +75,8 @@ class MovieThumbnailDataSource(
                 when(it) {
                     is Resource.Success -> {
                         _networkState.value = Resource.Success(0)
-                        val items = it.data.searchResults.map {movieEntity ->
-                            mapper.map(movieEntity)
+                        val items = it.data.map {movie ->
+                            mapper.map(movie)
                         }
                         callback.onResult(items, params.key + 1)
                     }

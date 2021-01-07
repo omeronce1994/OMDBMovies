@@ -2,6 +2,7 @@ package nando.android.core.data.datasource.moviesearch
 
 import kotlinx.coroutines.flow.Flow
 import nando.android.core.model.Resource
+import nando.android.core.model.movies.MovieModel
 import nando.android.core.model.network.response.moviesearch.MoviesSearchResponse
 
 /**
@@ -10,5 +11,5 @@ import nando.android.core.model.network.response.moviesearch.MoviesSearchRespons
  *
  */
 interface MovieSearchDataSource {
-    suspend fun searchMovie(query: String, page: Int): Flow<Resource<MoviesSearchResponse>>
+    suspend fun searchMovie(query: String, page: Int): Flow<Resource<List<MovieModel>>>
 }

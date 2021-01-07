@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.layout_movie_details.*
 import nando.android.movies.R
-import nando.android.movies.model.moviedetails.MovieItemModel
+import nando.android.movies.model.moviedetails.MovieDetailsModel
 import nando.android.movies.viewmodel.moviedetails.MovieDetailsViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -62,16 +62,16 @@ class MovieDetailsFragment: Fragment(R.layout.fragment_movie_details) {
         })
     }
 
-    private fun renderDetails(item: MovieItemModel) {
-        Picasso.get().load(item.imagePath).placeholder(R.drawable.movie_placeholder).into(image_movie)
-        toolbar.title = item.title
+    private fun renderDetails(movie: MovieDetailsModel) {
+        Picasso.get().load(movie.imagePath).placeholder(R.drawable.movie_placeholder).into(image_movie)
+        toolbar.title = movie.title
         text_runtime_release_and_genre.text =
-            String.format("%1s, %2s, %3s", item.runtime, item.releaseDate, item.genre)
-        text_director.text = item.director
-        text_actors.text = item.actors
-        text_plot.text = item.plot
-        text_metascore.text = item.metaScore
-        val favResId = if (item.isFavourite) {
+            String.format("%1s, %2s, %3s", movie.runtime, movie.releaseDate, movie.genre)
+        text_director.text = movie.director
+        text_actors.text = movie.actors
+        text_plot.text = movie.plot
+        text_metascore.text = movie.metaScore
+        val favResId = if (movie.isFavourite) {
             R.drawable.ic_star_blue
         }
         else {

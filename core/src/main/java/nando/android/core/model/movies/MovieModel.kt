@@ -1,6 +1,6 @@
-package nando.android.movies.model.moviedetails
+package nando.android.core.model.movies
 
-data class MovieItemModel(
+data class MovieModel (
     val imdbId: String = "",
     val title: String = "",
     val releaseDate: String = "",
@@ -11,5 +11,7 @@ data class MovieItemModel(
     val plot: String = "",
     val metaScore: String = "",
     val imagePath: String = "",
-    val isFavourite: Boolean = false
+    val isFavourite: Boolean = false,
+    val type: String = "",
+    val year: String = ""
 )

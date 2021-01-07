@@ -1,12 +1,15 @@
 package nando.android.core.mapper
 
 import nando.android.core.model.db.entities.MovieEntity
+import nando.android.core.model.movies.MovieModel
 import nando.android.core.model.network.response.moviedetails.MovieDetailsResponse
 
-class MovieEntityMapper: Mapper<MovieDetailsResponse, MovieEntity> {
+class MovieResponseToMovieModelMapper(
+    private val isFavourite: Boolean
+): Mapper<MovieDetailsResponse, MovieModel> {
 
-    override suspend fun map(from: MovieDetailsResponse): MovieEntity
-        = MovieEntity(
+    override suspend fun map(from: MovieDetailsResponse): MovieModel
+        = MovieModel(
         from.imdbID,
         from.title,
         from.released,
@@ -16,6 +19,7 @@ class MovieEntityMapper: Mapper<MovieDetailsResponse, MovieEntity> {
         from.actors,
         from.plot,
         from.metascore,
-        from.poster
+        from.poster,
+        isFavourite
     )
 }

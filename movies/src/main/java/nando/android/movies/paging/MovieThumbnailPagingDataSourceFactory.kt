@@ -2,15 +2,15 @@ package nando.android.movies.paging
 
 import androidx.paging.DataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import nando.android.movies.model.moviesearch.MovieThumbnailModel
 import org.koin.core.KoinComponent
 import org.koin.core.get
 import org.koin.core.parameter.parametersOf
-import org.koin.ext.scope
 
-class MovieThumbnailDataSourceFactory(
-    pagedDataSource: MovieThumbnailDataSource,
+class MovieThumbnailPagingDataSourceFactory(
+    pagedDataSource: MovieThumbnailPagingDataSource,
     private val scope: CoroutineScope
 ): DataSource.Factory<Int, MovieThumbnailModel>(), KoinComponent {
 
@@ -19,7 +19,7 @@ class MovieThumbnailDataSourceFactory(
      * this way we can observe each new instance of data source that is created each time we
      * call invalidate
      */
-    var sourceFlow = MutableStateFlow(pagedDataSource)
+    val sourceFlow = MutableStateFlow(pagedDataSource)
 
     var query: String = ""
         set(value) {
@@ -30,8 +30,12 @@ class MovieThumbnailDataSourceFactory(
 
     override fun create(): DataSource<Int, MovieThumbnailModel> {
         //inject data source instance and update flow
-        val dataSource = get<MovieThumbnailDataSource>{ parametersOf(scope, query)}
+        val dataSource = get<MovieThumbnailPagingDataSource>{ parametersOf(scope, query)}
         sourceFlow.value = dataSource
         return sourceFlow.value
+    }
+
+    fun release() {
+        scope.cancel()
     }
 }

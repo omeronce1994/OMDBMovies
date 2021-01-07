@@ -1,30 +1,18 @@
 package nando.android.movies.model.moviedetails.mapper
 
-import kotlinx.coroutines.flow.collect
 import nando.android.core.data.datasource.moviedetails.MovieDetailsDataSource
 import nando.android.core.mapper.Mapper
-import nando.android.core.model.Resource
-import nando.android.core.model.db.entities.MovieEntity
-import nando.android.movies.model.moviedetails.MovieItemModel
+import nando.android.core.model.movies.MovieModel
+import nando.android.movies.model.moviedetails.MovieDetailsModel
 
 /**
  * Mapper used to map our db model to feature model
  *
- * @property localDataSource
  */
-class MovieItemMapper(
-    private val localDataSource: MovieDetailsDataSource
-): Mapper<MovieEntity, MovieItemModel> {
+class MovieItemMapper(): Mapper<MovieModel, MovieDetailsModel> {
 
-    override suspend fun map(from: MovieEntity): MovieItemModel {
-        val id = from.imdbId
-        var result: Resource<MovieEntity> = Resource.Loading()
-        //if movie is in our local db mark it as favourite
-        localDataSource.getMovieById(id).collect {
-            result = it
-        }
-        val isFavourite = result is Resource.Success<*>
-        return MovieItemModel(
+    override suspend fun map(from: MovieModel): MovieDetailsModel {
+        return MovieDetailsModel(
             from.imdbId,
             from.title,
             from.releaseDate,
@@ -35,7 +23,7 @@ class MovieItemMapper(
             from.plot,
             from.metaScore,
             from.imagePath,
-            isFavourite
+            from.isFavourite
         )
     }
 }

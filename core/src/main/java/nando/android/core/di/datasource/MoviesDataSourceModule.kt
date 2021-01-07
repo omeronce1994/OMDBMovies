@@ -6,6 +6,7 @@ import nando.android.core.data.datasource.moviedetails.MovieDetailsDataSource
 import nando.android.core.data.datasource.moviedetails.RemoteMovieDetailsDataSource
 import nando.android.core.data.datasource.moviesearch.MovieSearchDataSource
 import nando.android.core.data.datasource.moviesearch.RemoteMovieSearchDataSource
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 internal val moviesDataSourceModule = module {
@@ -20,7 +21,7 @@ internal val moviesDataSourceModule = module {
     factory<MovieDetailsDataSource> { (type: DataSourceType) ->
         when (type) {
             DataSourceType.LOCAL -> get<LocalMovieDetailsDataSource>()
-            else -> RemoteMovieDetailsDataSource(get(), get())
+            else -> RemoteMovieDetailsDataSource(get(), get { parametersOf(DataSourceType.LOCAL) })
         }
     }
 

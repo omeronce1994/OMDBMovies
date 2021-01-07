@@ -62,7 +62,6 @@ class MovieSearchViewModel(
 
     fun search(query: String) {
         pagedFactory.query = query
-        viewModelScope
     }
 
     data class UiState(
